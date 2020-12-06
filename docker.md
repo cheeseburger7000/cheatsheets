@@ -36,7 +36,7 @@ COPY build/ /usr/share/nginx/html/
 COPY default.conf /etc/nginx/conf.d/default.conf
 ```
 
-nginx.conf
+default.conf
 
 ```bash
 server {
@@ -58,6 +58,13 @@ server {
     }
 }
 ```
+
+todo for nginx：
+
+- [ ] Nginx 配置文件
+- [ ] Nginx 配置反向代理
+- [ ] Nginx 配置虚拟主机
+- [ ] Nginx 配置负载均衡
 
 
 
