@@ -251,7 +251,18 @@ todo
 
 ## 函数
 
-todo
+### 1.考虑函数返回值的边界
+
+对于永远不会返回null的API，没有必要对返回值进行判空
+
+```java
+List<User> users = apiSvc.getUsers(); // Return empty list if not found any users.
+if (CollectionUtils.isEmpty(users)) {
+  return Collections.emptyList();
+}
+
+// ...
+```
 
 ## 工具方法
 
