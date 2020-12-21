@@ -2,9 +2,9 @@
 
 [TOC]
 
-## 语法
+# 语法
 
-### 1. 三目表达式
+## 1. 三目表达式
 
 ```java
 // 💩
@@ -22,7 +22,7 @@ String userType = isMember(phoneNumber) ? "会员" : "游客";
 
 ⚠️ 注意：对于包装类型的数值，拆包、自动拆包时要注意NPE
 
-### 2. for-each
+## 2. for-each
 
 ```java
 
@@ -45,7 +45,7 @@ for(Double value : valueList) {
 }
 ```
 
-### 3. 利用 try-with-resource 关闭资源
+## 3. 利用 try-with-resource 关闭资源
 
 ```java
 // 💩
@@ -84,11 +84,11 @@ catch (IOException e) {
 }
 ```
 
-### 4. 卫语句
+## 4. 卫语句
 
 利用卫语句，将异常提前返回，避免定义中间变量
 
-### 5. static 关键词
+## 5. static 关键词
 
 静态字段、静态函数，调用时无需初始化类对象。
 
@@ -97,7 +97,7 @@ catch (IOException e) {
 - [ ] 静态函数避免状态？
 - [ ] 什么样的函数才可以定义为静态函数？
 
-### 6. lambda 表达式
+## 6. lambda 表达式
 
 ```java
 new Thread(new Runnable() {
@@ -114,7 +114,7 @@ new Thread(() -> {
 - [ ] 理解 Java 如何实现 filter、map等这些函数的
 - [ ] 理解 Java 8 特性的概念，例如方法引用、日期等
 
-### 7. 方法引用
+## 7. 方法引用
 
 使用方法引用简化 Lambda 表达式，省略变量声明和函数调用
 
@@ -135,7 +135,7 @@ List<Long> userIdList = userList
     .collect(Collectors.toList());
 ```
 
-### 8. 静态导入
+## 8. 静态导入
 
 ```java
 // 💩
@@ -155,7 +155,7 @@ List<Double> areaList = radiusList
   .collect(toList());
 ```
 
-### 9. 利用非检查异常
+## 9. 利用非检查异常
 
 非检查异常继承了RuntimeException ，特点是代码不需要处理它们也能通过编译。
 
@@ -163,9 +163,9 @@ List<Double> areaList = radiusList
 
 在 Web 开发下，非检查异常 + 全局异常处理器这种最佳实践处理异常。
 
-## 注解
+# 注解
 
-### 1. Lombok
+## 1. Lombok
 
 Lombok 提供了许多用于消除大量模版代码的注解
 
@@ -175,7 +175,7 @@ Lombok 提供了许多用于消除大量模版代码的注解
 @Date
 ```
 
-### 2. Validation 注解
+## 2. Validation 注解
 
 ```java
 @Getter
@@ -198,7 +198,7 @@ public class UserService {
 }
 ```
 
-### 3. Spring 的 @NotNull
+## 3. Spring 的 @NotNull
 
 标注参数或返回值非空。
 
@@ -225,7 +225,7 @@ public @NonNull List<UserVO> queryCompanyUser(
 }
 ```
 
-### 4. 注解特性
+## 4. 注解特性
 
 精解注解声明
 
@@ -245,17 +245,37 @@ public @NonNull List<UserVO> queryCompanyUser(
 @GetMapping("/getUser")
 ````
 
-## 泛型
+# 泛型
 
 todo
 
-## 函数
+# 函数
 
-todo
+## 1.考虑函数返回值的边界
 
-## 工具方法
+对于永远不会返回null的API，没有必要对返回值进行判空
 
-### 1. 避免空值判断
+```java
+// 💩
+List<User> users = apiSvc.getUsers(); // Return empty list if not found any users.
+if (!CollectionUtils.isEmpty(users)) {
+  List<String> names = user
+    .stream()
+    .map(User::getName)
+    .collect(Collectors.toList());
+}
+
+// 🎉
+List<User> users = apiSvc.getUsers();
+List<String> names = user
+  .stream()
+  .map(User::getName)
+  .collect(Collectors.toList());
+```
+
+# 工具方法
+
+## 1. 避免空值判断
 
 ```java
 // 💩
@@ -277,7 +297,7 @@ if (StringUtils.isBlank(username)) {
 }
 ```
 
-### 2. 避免条件判断
+## 2. 避免条件判断
 
 ```java
 // 💩
@@ -293,7 +313,7 @@ else {
 double result = Math.max(MIN_LIMIT, value);
 ```
 
-### 3. 简化赋值语句
+## 3. 简化赋值语句
 
 ```java
 // 💩
@@ -313,7 +333,7 @@ public static final List<String> ANIMAL_LIST = Arrays.asList("dog", "cat", "tige
 public static final List<String> ANIMAL_LIST = ImmutableList.of("dog", "cat", "tiger");
 ```
 
-### 4. 简化数据拷贝
+## 4. 简化数据拷贝
 
 ```java
 // 💩
@@ -334,7 +354,7 @@ BeanUtils.copyProperties(userDO, userVO);
 userVOList.add(userVO);
 ```
 
-### 5. 简化异常断言
+## 5. 简化异常断言
 
 ```java
 // 💩
@@ -347,7 +367,7 @@ if (Objects.isNull(userId)) {
 Assert.notNull(userId, "用户标识不能为空");
 ```
 
-### 6. 简化测试用例
+## 6. 简化测试用例
 
 将测试用例数据使用JSON格式存储到文件，然后使用Jacksin解析成对象，可减少大量的赋值语句。
 
@@ -374,7 +394,7 @@ public void testCreateUser() {
 }
 ```
 
-### 7. 简化算法实现
+## 7. 简化算法实现
 
 一些常规算法，已经有现成的工具方法时，我们就没有必要自己实现了。
 
@@ -392,7 +412,7 @@ List<List<Integer>> partitionList = ListUtils.partition(valueList, PARTITION_SIZ
 
 todo 了解 `ListUtils.partition` Guava 和 Apache 的工具类
 
-### 8. 封装工具方法
+## 8. 封装工具方法
 
 特殊的算法，在没有现成的工具方法时，就得自己实现。
 
@@ -424,9 +444,9 @@ public final class SqlHelper {
 SqlHelper.setLong(statement, 1, user.getId());
 ```
 
-## 数据结构
+# 数据结构
 
-### 1. Map简化
+## 1. Map简化
 
 对于映射关系的 if/else 或 switch/case ，可以使用Map进行简化
 
@@ -458,7 +478,7 @@ public static String getBiologyClass(String name) {
 }
 ```
 
-### 2. 简化多个返回值
+## 2. 简化多个返回值
 
 Java 不像 Python 和 Go ，方法不支持多个返回值。
 
@@ -479,7 +499,7 @@ public static Pair<Point, Double> getNearest(Point point,
 }
 ```
 
-### 3. ThreadLocal
+## 3. ThreadLocal
 
 线程专有对象，可在整个线程的生命周期中随时取用。
 
@@ -487,9 +507,9 @@ public static Pair<Point, Double> getNearest(Point point,
 
 ThreadLocal 存在内存泄露的风险，尽量在业务代码结束之前调用 remove 方法进行数据清除。
 
-## Optional
+# Optional
 
-### 1. 保证值存在
+## 1. 保证值存在
 
 ```java
 // 💩
@@ -507,7 +527,7 @@ Integer thisValue = Optional
   .orElse(DEFAULT_VALUE);
 ```
 
-### 2. 保证值合法
+## 2. 保证值合法
 
 ```java
 // 💩
@@ -528,7 +548,7 @@ Integer thisValue = Optional
 
 ```
 
-### 3. 避免空判断
+## 3. 避免空判断
 
 ```java
 // 💩
@@ -552,9 +572,9 @@ tring zipcode = Optional
   .orElse(null);
 ```
 
-## Stream
+# Stream
 
-### 1. 匹配集合数据
+## 1. 匹配集合数据
 
 ```java
 // 💩
@@ -573,7 +593,7 @@ boolean isFound = userList
 
 ```
 
-### 2. 过滤集合数据
+## 2. 过滤集合数据
 
 ```java
 // 💩
@@ -591,7 +611,7 @@ List<UserDO> result = users
   .collect(Collectors.toList());
 ```
 
-### 3. 汇总集合数据
+## 3. 汇总集合数据
 
 ```java
 // 💩
@@ -607,7 +627,7 @@ double total = accountList
   .sum();
 ```
 
-### 4. 转化集合数据
+## 4. 转化集合数据
 
 ```java
 // 💩
@@ -623,7 +643,7 @@ List<UserVO> userVOList = userDOList
   .collect(Collectors.toList());
 ```
 
-### 5. 分组集合数据
+## 5. 分组集合数据
 
 ```java
 // 💩
@@ -640,7 +660,7 @@ Map<Long, List<UserDO>> roleUserMap = userDOList
   .collect(Collectors.groupingBy(UserDO::getRoleId));
 ```
 
-### 6. 分组汇总集合
+## 6. 分组汇总集合
 
 ```java
 // 💩
@@ -657,7 +677,7 @@ roleTotalMap = accountList
   .collect(Collectors.groupingBy(Account::getRoleId,                             			Collectors.summingDouble(Account::getBalance)));
 ```
 
-### 7. 生成范围集合
+## 7. 生成范围集合
 
 ```java
 // 💩
@@ -682,9 +702,9 @@ int[] array2 = IntStream
   .toArray();
 ```
 
-## 程序结构
+# 程序结构
 
-### 1. 直接返回条件表达式
+## 1. 直接返回条件表达式
 
 ```java
 // 💩
@@ -706,7 +726,7 @@ public boolean isSuper(Long userId) {
 }
 ```
 
-### 2. 最小化条件作用域
+## 2. 最小化条件作用域
 
 ```java
 // 💩
@@ -735,7 +755,7 @@ else {
 dingtalkService.sendMessage(user.getPhone(), message);
 ```
 
-### 3. 利用非空对象
+## 3. 利用非空对象
 
 ```java
 // 💩
@@ -745,13 +765,13 @@ username.equals("admin");
 "admin".equals(username);
 ```
 
-## 设计模式
+# 设计模式
 
-### 1. 模版方法
+## 1. 模版方法
 
-### 2. 建造者模式
+## 2. 建造者模式
 
-### 3. 代理模式
+## 3. 代理模式
 
 ```java
 // 💩
@@ -831,9 +851,9 @@ public class WebExceptionAspect {
 
 
 
-## 删除代码
+# 删除代码
 
-### 1. 删除已经废弃的代码
+## 1. 删除已经废弃的代码
 
 1. 包、导入
 2. 类、字段、方法、变量、注解
@@ -841,9 +861,9 @@ public class WebExceptionAspect {
 4. Maven导入、Mybatis的SQL语句
 5. 配置文件的属性配置字段等
 
-###  2. 删除接口方法的 public 关键词
+## 2. 删除接口方法的 public 关键词
 
-### 3. 删除枚举构造方法的 private 关键词
+## 3. 删除枚举构造方法的 private 关键词
 
 枚举的构造方法都是 private 的，可不用显式声明
 
@@ -877,11 +897,11 @@ public enum UserStatus {
 }
 ```
 
-### 4. 删除 final 类的方法的 final 关键词
+## 4. 删除 final 类的方法的 final 关键词
 
 final 类无法被继承，因此其方法不会被覆盖，没有必要添加 final 修饰
 
-### 5. 删除不必要的变量
+## 5. 删除不必要的变量
 
 ```java
 // 💩
@@ -896,6 +916,7 @@ public Boolean existsUser(Long userId) {
 }
 ```
 
-## 其他
+# 其他
 
-[CR是一场苦涩但有意思的修行 - 阿里孤尽](https://mp.weixin.qq.com/s?__biz=MzU4NzU0MDIzOQ==&mid=2247489170&idx=1&sn=e47dcf2227517172ff97105e8a0543d0&chksm=fdeb24f2ca9cade4985b11abd05d4c8e2fdf2cf9b5a73dbe27d320a036d684563679e8d5c565&token=1498852714&lang=zh_CN&scene=21#wechat_redirect)
+- [CR是一场苦涩但有意思的修行 - 阿里孤尽](https://mp.weixin.qq.com/s?__biz=MzU4NzU0MDIzOQ==&mid=2247489170&idx=1&sn=e47dcf2227517172ff97105e8a0543d0&chksm=fdeb24f2ca9cade4985b11abd05d4c8e2fdf2cf9b5a73dbe27d320a036d684563679e8d5c565&token=1498852714&lang=zh_CN&scene=21#wechat_redirect)
+- [如何写出无法维护的代码 - CoolShell](https://coolshell.cn/articles/4758.html#%E6%B5%8B%E8%AF%95)
