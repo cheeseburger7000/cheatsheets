@@ -256,12 +256,21 @@ todo
 对于永远不会返回null的API，没有必要对返回值进行判空
 
 ```java
+// 💩
 List<User> users = apiSvc.getUsers(); // Return empty list if not found any users.
-if (CollectionUtils.isEmpty(users)) {
-  return Collections.emptyList();
+if (!CollectionUtils.isEmpty(users)) {
+  List<String> names = user
+    .stream()
+    .map(User::getName)
+    .collect(Collectors.toList());
 }
 
-// ...
+// 🎉
+List<User> users = apiSvc.getUsers();
+List<String> names = user
+  .stream()
+  .map(User::getName)
+  .collect(Collectors.toList());
 ```
 
 ## 工具方法
