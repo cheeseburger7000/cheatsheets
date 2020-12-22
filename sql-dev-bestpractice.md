@@ -11,4 +11,17 @@
 
 超过三张表进行 join ，当数据规模较大时，对数据库的压力很大。
 
+```sql
+# 😭
+select * from tag
+  join tag_post on tag_post.tag_id = tag.id
+  join post on tag_post.post_id = post.id
+where tag.tag = 'mysql';
+
+# 👍
+select * from tag where tag = 'mysql';
+select * from tag_post where tag_id = 1234;
+select * from post where id in (123, 456, 567, 9989, 8909);
+```
+
 应该将写简单 sql （查询单表），将逻辑放在应用层，这样业务逻辑会更清晰，而且在应用层（内存）实现特定的 join 也容易得多。很多高性能的应用都会对关联查询进行分解。简单地，可以对每个表进行一次单表查询，然后将结果在应用程序中进行关联。关于分解关联查询的优势更多细节可参考《高性能Mysql》中的 6.3.3 节。
