@@ -25,3 +25,50 @@ select * from post where id in (123, 456, 567, 9989, 8909);
 ```
 
 应该将写简单 sql （查询单表），将逻辑放在应用层，这样业务逻辑会更清晰，而且在应用层（内存）实现特定的 join 也容易得多。很多高性能的应用都会对关联查询进行分解。简单地，可以对每个表进行一次单表查询，然后将结果在应用程序中进行关联。关于分解关联查询的优势更多细节可参考《高性能Mysql》中的 6.3.3 节。
+
+# MySQL 避免重复插入数据
+
+1. insert ignore into
+
+```sql
+INSERT IGNORE INTO USER (u_id, NAME, gender)
+VALUES
+	('UUID', 'luca', 'MALE');
+```
+
+2. on duplicate key update
+
+```sql
+INSERT INTO USER (u_id, NAME, gender)
+VALUES
+	('UUID', 'luca', 'MALE') ON DUPLICATE KEY UPDATE NAME = 'luca',
+	gender = 'MALE';
+```
+
+3. replace into
+
+```sql
+REPLACE INTO USER (u_id, NAME, gender)
+VALUES
+	('UUID', 'luca', 'MALE');
+```
+
+4. insert if not exists
+
+```sql
+INSERT INTO USER (u_id, NAME, gender) SELECT
+	'UUID',
+	'luca',
+	'MALE'
+FROM
+	USER
+WHERE
+	NOT EXISTS (
+		SELECT
+			u_id
+		FROM
+			USER
+		WHERE
+			u_id = 'UUID'
+	);
+```
