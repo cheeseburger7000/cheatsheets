@@ -49,7 +49,7 @@ public class Payment {
 
 Payable
 
-``` java
+```java
 interface Payable {
   void pay();
 }
