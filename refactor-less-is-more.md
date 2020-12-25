@@ -273,6 +273,44 @@ List<String> names = user
   .collect(Collectors.toList());
 ```
 
+## 2.使用QueryTable模式替代双重for循环
+
+```java
+private List<Product> getProductsWithCategory() {
+	List<Category> categories = getAllCategories();
+	List<Product> products = getAllProducts();
+	for (Product product : products) {
+		for (Category category : categories) {
+			if (product.getCategoryId().equals(category.getId())) {
+				product.setCategory(category);
+			}
+		}	
+	}	
+	for (Product product : products) {
+		if (product.getCategory() == null) {
+			product.setCategory(Category.uncategorized());
+		}
+	}
+	return products;
+}
+
+// More clean then Nested for, right?
+private List<Product> getProductsWithCategory() {
+	Map<String, String> queryTable = new HashMap<>();
+	List<Category> categories = getAllCategories();
+	for (Category category : categories) {
+		queryTable.put(category.getId(), category);
+	}
+
+	List<Product> products = getAllProducts();
+	for (Product product : products) {
+		Category category = queryTable.getOrDefault(product.getCategoryId(), Category.uncategorized());
+		product.setCategory(category);
+	}
+	return products;
+}
+```
+
 # 工具方法
 
 ## 1. 避免空值判断
