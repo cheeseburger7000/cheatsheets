@@ -1,14 +1,14 @@
-## SOLID
+# SOLID
 
 [TOC]
 
-## Single Responsibility Principle
+# Single Responsibility Principle
 
 todo
 
-## Open Close Principle
+# Open Close Principle
 
-### Before
+## Before
 
 Handler
 
@@ -45,7 +45,7 @@ public class Payment {
 }
 ```
 
-### After
+## After
 
 Payable
 
@@ -105,15 +105,42 @@ public Map<String, Object> pay(String type) {
 }
 ```
 
-## Liskov Substitution Principle
+# Liskov Substitution Principle
 
 todo 🦆 example
 
-## Interface Segregation Principle
+# Interface Segregation Principle
 
-todo
+RabbitMQ Connection and Channel
 
-## Dependency Inversion Principle
+## Before
+
+```java
+public interface Connection {
+  void open();
+  void close();
+  byte[] receive();
+  void send(byte[] data);
+}
+```
+
+## After
+
+```java
+// 连接管理
+public interface Connection {
+  void open();
+  void close();
+}
+
+// 传输数据
+public interface Channel {
+  byte[] receive();
+  void send(byte[] data);
+}
+```
+
+# Dependency Inversion Principle
 
 Never depend on anything concrete, only depend on abstractions.
 
@@ -124,7 +151,7 @@ Able to change an implementation easily without altering the high level code.
 - High level module: handler
 - Low level module: db
 
-## Don't get trapped by SOLID
+# Don't get trapped by SOLID
 
 - SOLID design principle are principles, not rules.
 - Always use common sense when applying SOLID.
