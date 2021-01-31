@@ -20,6 +20,7 @@ docker images
 
 docker run -d -p 3000:80 --name app react-app
 docker ps -a
+docker logs -f --tail 100 [Container ID]
 
 curl -v -i localhost:3000
 
