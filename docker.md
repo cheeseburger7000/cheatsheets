@@ -13,7 +13,7 @@ cd react-for-docker
 npm run build
 
 touch Dockerfile
-touch nginx.conf
+touch default.conf
 
 docker build -t react-app .
 docker images
